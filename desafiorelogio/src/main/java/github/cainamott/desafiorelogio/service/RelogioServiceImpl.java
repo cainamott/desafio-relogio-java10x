@@ -21,6 +21,7 @@ public class RelogioServiceImpl implements RelogioService {
         this.repository = repository;
     }
 
+    @Override
     public Relogio criaRelogio(RelogioDTO dto){
         Relogio relogio = mapper.mapeiaRelogio(dto);
         relogio.setId(UUID.randomUUID());
@@ -28,8 +29,9 @@ public class RelogioServiceImpl implements RelogioService {
     }
 
     @Override
-    public void atualizaRelogio(RelogioDTO dto) {
-
+    public void atualizaRelogio(UUID id, RelogioDTO dto) {
+        Optional<Relogio> relogio = repository.findById(id);
+        mapper.mapeiaRelogio(dto);
     }
 
     @Override

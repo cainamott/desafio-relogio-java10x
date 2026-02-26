@@ -10,7 +10,7 @@ public interface RelogioService {
 
     public Relogio criaRelogio(RelogioDTO dto);
 
-    public void atualizaRelogio(RelogioDTO dto);
+    public void atualizaRelogio(UUID id, RelogioDTO dto);
 
     public void deletaRelogio(UUID id);
 
