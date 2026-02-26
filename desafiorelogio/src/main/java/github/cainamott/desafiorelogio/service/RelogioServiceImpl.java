@@ -4,9 +4,11 @@ import github.cainamott.desafiorelogio.dto.RelogioDTO;
 import github.cainamott.desafiorelogio.entity.Relogio;
 import github.cainamott.desafiorelogio.mapper.RelogioMapper;
 import github.cainamott.desafiorelogio.repository.RelogioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -37,7 +39,8 @@ public class RelogioServiceImpl implements RelogioService {
 
     @Override
     public Relogio buscaRelogioPorId(UUID id) {
-        return null;
+        return repository.findById(id).orElseThrow();
+
     }
 
     @Override

@@ -1,12 +1,11 @@
 package github.cainamott.desafiorelogio.mapper;
 
+import github.cainamott.desafiorelogio.dto.CalculaPontuacaoColecionadorDTO;
 import github.cainamott.desafiorelogio.dto.RelogioDTO;
-import github.cainamott.desafiorelogio.entity.MaterialCaixa;
-import github.cainamott.desafiorelogio.entity.Relogio;
-import github.cainamott.desafiorelogio.entity.TipoMovimento;
-import github.cainamott.desafiorelogio.entity.TipoVidro;
+import github.cainamott.desafiorelogio.entity.*;
+import github.cainamott.desafiorelogio.factory.RelogioFactory;
 
-public class RelogioMapper {
+public class RelogioMapper implements RelogioFactory{
 
     public Relogio mapeiaRelogio(RelogioDTO dto){
         Relogio relogio = new Relogio();
@@ -22,7 +21,13 @@ public class RelogioMapper {
         relogio.setLugToLug(dto.lugToLug());
         relogio.setPrecoEmCentavos(dto.precoEmCentavos());
         relogio.setEtiquetaResistenciaAgua(calculaEtiquetaResistenciaAgua(dto.resistencia()));
-        relogio.setPontuacaoColecionador(calculaPontuacaoColecionador(dto.tipoVidro(), dto.resistencia(), dto.tipoMovimento(), dto.materialCaixa(), dto.diametro()));
+        relogio.setPontuacaoColecionador(
+                calculaPontuacaoColecionador(
+                        dto.tipoVidro(),
+                        dto.resistencia(),
+                        dto.tipoMovimento(),
+                        dto.materialCaixa(),
+                        dto.diametro()));
         relogio.setUrlDaImagem(dto.urlDaImagem());
         return relogio;
     }
@@ -40,14 +45,33 @@ public class RelogioMapper {
         return null;
     }
 
+    @Override
     public Integer calculaPontuacaoColecionador(
             TipoVidro tipoVidro,
             Integer resistencia,
             TipoMovimento movimento,
             MaterialCaixa materialCaixa,
-            Integer diametro){
-
-        return null;
+            Integer diametro
+    ) {
+        Integer pontuacao = 0;
+        if(tipoVidro == TipoVidro.valueOf("SAPPHIRE") ){
+            pontuacao += 25;
+        }
+        if(resistencia >= 200) {
+            pontuacao += 25;
+        }else if(resistencia >= 100){
+            pontuacao += 15;
+        }
+        if(movimento.equals(TipoMovimento.valueOf("AUTOMATIC"))){
+            pontuacao += 20;
+        }if(materialCaixa.equals(MaterialCaixa.valueOf("STEEL"))){
+            pontuacao += 10;
+        }else if(materialCaixa.equals(MaterialCaixa.valueOf("TITANIUM"))){
+            pontuacao += 12;
+        }
+        if(diametro >= 38 && diametro <= 42){
+            pontuacao += 8;
+        }
+        return pontuacao;
     }
-
 }

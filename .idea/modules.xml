@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/desafiorelogio.iml" filepath="$PROJECT_DIR$/.idea/desafiorelogio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/desafio-relogio-java10x.iml" filepath="$PROJECT_DIR$/.idea/desafio-relogio-java10x.iml" />
+      <module fileurl="file://$PROJECT_DIR$/desafiorelogio/desafiorelogio.iml" filepath="$PROJECT_DIR$/desafiorelogio/desafiorelogio.iml" />
     </modules>
   </component>
 </project>
