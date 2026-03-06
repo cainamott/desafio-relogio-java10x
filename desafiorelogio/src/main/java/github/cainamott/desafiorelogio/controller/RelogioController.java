@@ -7,6 +7,7 @@ import github.cainamott.desafiorelogio.service.RelogioServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,11 +25,16 @@ public class RelogioController {
         return ResponseEntity.ok(service.criaRelogio(entity));
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Relogio> atualizaRelogio(
-            @RequestParam UUID id,
+            @PathVariable UUID id,
             @RequestBody RelogioDTO dto){
         service.atualizaRelogio(id, dto);
         return ResponseEntity.accepted().build();
+    }
+
+    @GetMapping(path = "/all")
+    public ResponseEntity<List<Relogio>> listarTodosRelogios(){
+        return ResponseEntity.ok(service.listaTodosRelogios());
     }
 }

@@ -5,6 +5,7 @@ import github.cainamott.desafiorelogio.entity.Relogio;
 import github.cainamott.desafiorelogio.mapper.RelogioMapper;
 import github.cainamott.desafiorelogio.repository.RelogioRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,24 +15,23 @@ import java.util.UUID;
 @Service
 public class RelogioServiceImpl implements RelogioService {
 
+    @Autowired
     private RelogioRepository repository;
+    @Autowired
     private RelogioMapper mapper;
 
-    public RelogioServiceImpl(RelogioRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public Relogio criaRelogio(RelogioDTO dto){
-        Relogio relogio = mapper.mapeiaRelogio(dto);
+        Relogio relogio = mapper.mapeiaRelogio(dto, new Relogio());
         relogio.setId(UUID.randomUUID());
         return repository.save(relogio);
     }
 
     @Override
     public void atualizaRelogio(UUID id, RelogioDTO dto) {
-        Optional<Relogio> relogio = repository.findById(id);
-        mapper.mapeiaRelogio(dto);
+        Relogio relogio = repository.findById(id).orElseThrow();
+        mapper.mapeiaRelogio(dto, relogio);
     }
 
     @Override
@@ -49,4 +49,11 @@ public class RelogioServiceImpl implements RelogioService {
     public List<Relogio> listaRelogiosPorFiltro() {
         return List.of();
     }
+
+    @Override
+    public List<Relogio> listaTodosRelogios() {
+         return repository.findAll();
+    }
+
+
 }

@@ -19,7 +19,6 @@ public record RelogioDTO(
         Integer lugToLug,
         Integer espessura,
         Integer largura,
-        String urlDaImagem,
-        String etiquetaResistenciaAgua,
-        Integer pontuacaoColecionador) {
+        String urlDaImagem
+        ) {
 }

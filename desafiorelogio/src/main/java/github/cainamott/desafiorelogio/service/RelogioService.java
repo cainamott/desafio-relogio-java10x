@@ -18,4 +18,6 @@ public interface RelogioService {
 
     public List<Relogio> listaRelogiosPorFiltro();
 
+    public List<Relogio> listaTodosRelogios();
+
 }
