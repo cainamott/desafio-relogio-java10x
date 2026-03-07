@@ -1,5 +1,8 @@
 package github.cainamott.desafiorelogio.controller;
 
+import github.cainamott.desafiorelogio.dto.AtualizaRelogioDTO;
+import github.cainamott.desafiorelogio.dto.CriaRelogioDTO;
+import github.cainamott.desafiorelogio.dto.PaginaRelogioDTO;
 import github.cainamott.desafiorelogio.dto.RelogioDTO;
 import github.cainamott.desafiorelogio.entity.Relogio;
 import github.cainamott.desafiorelogio.service.RelogioService;
@@ -21,20 +24,58 @@ public class RelogioController {
     }
 
     @PostMapping
-    public ResponseEntity<Relogio> criarRelogio(@RequestBody RelogioDTO entity){
+    public ResponseEntity<RelogioDTO> criarRelogio(@RequestBody CriaRelogioDTO entity){
         return ResponseEntity.ok(service.criaRelogio(entity));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Relogio> atualizaRelogio(
+    public ResponseEntity<RelogioDTO> atualizaRelogio(
             @PathVariable UUID id,
-            @RequestBody RelogioDTO dto){
-        service.atualizaRelogio(id, dto);
-        return ResponseEntity.accepted().build();
+            @RequestBody AtualizaRelogioDTO dto){
+        return ResponseEntity.ok(service.atualizaRelogio(id, dto));
     }
 
-    @GetMapping(path = "/all")
-    public ResponseEntity<List<Relogio>> listarTodosRelogios(){
-        return ResponseEntity.ok(service.listaTodosRelogios());
+    @GetMapping
+    public PaginaRelogioDTO listaRelogios(
+            @RequestParam(defaultValue = "1") Integer pagina,
+            @RequestParam(defaultValue = "12") Integer porPagina,
+            @RequestParam(required = false) String busca,
+            @RequestParam(required = false) String marca,
+            @RequestParam(required = false) String modelo,
+            @RequestParam(required = false) String referencia,
+            @RequestParam(required = false) String tipoMovimento,
+            @RequestParam(required = false) String materialCaixa,
+            @RequestParam(required = false) String tipoVidro,
+            @RequestParam(required = false) Integer resistenciaMin,
+            @RequestParam(required = false) Integer resistenciaMax,
+            @RequestParam(required = false) Integer precoMin,
+            @RequestParam(required = false) Integer precoMax,
+            @RequestParam(required = false) Integer diametroMin,
+            @RequestParam(required = false) Integer diametroMax,
+            @RequestParam(required = false) String ordenar
+    ){
+        return service.listaRelogios(
+                pagina,
+                porPagina,
+                busca,
+                marca,
+                modelo,
+                referencia,
+                tipoMovimento,
+                materialCaixa,
+                tipoVidro,
+                resistenciaMin,
+                resistenciaMax,
+                precoMin,
+                precoMax,
+                diametroMin,
+                diametroMax,
+                ordenar
+        );
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<RelogioDTO> buscarPorId(UUID id){
+        return ResponseEntity.ok(service.buscaRelogioPorId(id));
     }
 }

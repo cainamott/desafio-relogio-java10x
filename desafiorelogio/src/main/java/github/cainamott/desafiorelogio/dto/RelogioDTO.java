@@ -1,24 +1,27 @@
 package github.cainamott.desafiorelogio.dto;
 
-import github.cainamott.desafiorelogio.entity.MaterialCaixa;
-import github.cainamott.desafiorelogio.entity.TipoMovimento;
-import github.cainamott.desafiorelogio.entity.TipoVidro;
+import lombok.Builder;
 
 import java.math.BigInteger;
+import java.util.UUID;
 
+@Builder
 public record RelogioDTO(
+        UUID id,
         String marca,
         String modelo,
-        TipoMovimento tipoMovimento,
-        MaterialCaixa materialCaixa,
+        String tipoMovimento,
+        String materialCaixa,
         String referencia,
-        TipoVidro tipoVidro,
+        String tipoVidro,
         Integer resistencia,
         BigInteger precoEmCentavos,
         Integer diametro,
         Integer lugToLug,
         Integer espessura,
         Integer largura,
-        String urlDaImagem
+        String urlDaImagem,
+        String etiquetaResistenciaAgua,
+        String pontuacaoColecionador
         ) {
 }

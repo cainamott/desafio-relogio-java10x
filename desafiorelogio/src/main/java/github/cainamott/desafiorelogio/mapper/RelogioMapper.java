@@ -1,38 +1,42 @@
 package github.cainamott.desafiorelogio.mapper;
 
-import github.cainamott.desafiorelogio.dto.CalculaPontuacaoColecionadorDTO;
 import github.cainamott.desafiorelogio.dto.RelogioDTO;
 import github.cainamott.desafiorelogio.entity.*;
-import github.cainamott.desafiorelogio.factory.RelogioFactory;
+import github.cainamott.desafiorelogio.entity.enums.MaterialCaixa;
+import github.cainamott.desafiorelogio.entity.enums.TipoMovimento;
+import github.cainamott.desafiorelogio.entity.enums.TipoVidro;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RelogioMapper implements RelogioFactory{
+public class RelogioMapper{
 
-    public Relogio mapeiaRelogio(RelogioDTO dto, Relogio relogio){
-        if(dto.marca() != null) relogio.setMarca(dto.marca());
-        if(dto.modelo() != null) relogio.setModelo(dto.modelo());
-        if(dto.diametro() != null) relogio.setDiametro(dto.diametro());
-        if(dto.largura() != null) relogio.setLargura(dto.largura());
-        if(dto.referencia() != null) relogio.setReferencia(dto.referencia());
-        if(dto.tipoMovimento() != null) relogio.setTipoMovimento(dto.tipoMovimento());
-        if(dto.materialCaixa() != null) relogio.setMaterialCaixa(dto.materialCaixa());
-        if(dto.resistencia() != null) relogio.setResistencia(dto.resistencia());
-        if(dto.tipoVidro() != null) relogio.setTipoVidro(dto.tipoVidro());
-        if(dto.lugToLug() != null) relogio.setLugToLug(dto.lugToLug());
-        if(dto.precoEmCentavos() != null) relogio.setPrecoEmCentavos(dto.precoEmCentavos());
-        if(dto.resistencia() != null) relogio.setEtiquetaResistenciaAgua(calculaEtiquetaResistenciaAgua(dto.resistencia()));
-        if (dto.tipoVidro() != null && dto.resistencia() != null && dto.materialCaixa() != null && dto.diametro() != null)
-                relogio.setPontuacaoColecionador(
-                calculaPontuacaoColecionador(
-                        dto.tipoVidro(),
-                        dto.resistencia(),
-                        dto.tipoMovimento(),
-                        dto.materialCaixa(),
-                        dto.diametro()));
-        relogio.setUrlDaImagem(dto.urlDaImagem());
-        return relogio;
+    public MaterialCaixa materialCaixa;
+    public TipoVidro tipoVidro;
+    public TipoMovimento tipoMovimento;
+
+    public RelogioDTO relogioToDTO(Relogio entity){
+        return RelogioDTO.builder()
+                .id(entity.getId())
+                .marca(entity.getMarca())
+                .modelo(entity.getModelo())
+                .referencia(entity.getReferencia())
+                .materialCaixa(entity.getMaterialCaixa().toApi())
+                .tipoVidro(entity.getTipoVidro().toApi())
+                .tipoMovimento(entity.getTipoMovimento().toApi())
+                .diametro(entity.getDiametro())
+                .espessura(entity.getEspessura())
+                .lugToLug(entity.getLugToLug())
+                .largura(entity.getLugToLug())
+                .resistencia(entity.getResistenciaAgua())
+                .etiquetaResistenciaAgua(entity.getEtiquetaResistenciaAgua())
+                .espessura(entity.getEspessura())
+                .precoEmCentavos(entity.getPrecoEmCentavos())
+                .urlDaImagem(entity.getUrlDaImagem())
+                .etiquetaResistenciaAgua(calculaEtiquetaResistenciaAgua(entity.getResistenciaAgua()))
+                .pontuacaoColecionador(calculaPontuacaoColecionador(entity).toString())
+                .build();
     }
+
 
     public String calculaEtiquetaResistenciaAgua(Integer resistencia){
         if(resistencia < 50){
@@ -47,31 +51,24 @@ public class RelogioMapper implements RelogioFactory{
         return null;
     }
 
-    @Override
-    public Integer calculaPontuacaoColecionador(
-            TipoVidro tipoVidro,
-            Integer resistencia,
-            TipoMovimento movimento,
-            MaterialCaixa materialCaixa,
-            Integer diametro
-    ) {
+    public Integer calculaPontuacaoColecionador(Relogio relogio) {
         Integer pontuacao = 0;
-        if(tipoVidro == TipoVidro.valueOf("SAPPHIRE") ){
+        if(relogio.getTipoVidro() == TipoVidro.SAPPHIRE){
             pontuacao += 25;
         }
-        if(resistencia >= 200) {
+        if(relogio.getResistenciaAgua() >= 200) {
             pontuacao += 25;
-        }else if(resistencia >= 100){
+        }else if(relogio.getResistenciaAgua() >= 100){
             pontuacao += 15;
         }
-        if(movimento.equals(TipoMovimento.valueOf("AUTOMATIC"))){
+        if(relogio.getTipoMovimento().equals(TipoMovimento.AUTOMATIC)){
             pontuacao += 20;
-        }if(materialCaixa.equals(MaterialCaixa.valueOf("STEEL"))){
+        }if(relogio.getMaterialCaixa().equals(MaterialCaixa.STEEL)){
             pontuacao += 10;
-        }else if(materialCaixa.equals(MaterialCaixa.valueOf("TITANIUM"))){
+        }else if(relogio.getMaterialCaixa().equals(MaterialCaixa.TITANIUM)){
             pontuacao += 12;
         }
-        if(diametro >= 38 && diametro <= 42){
+        if(relogio.getDiametro() >= 38 && relogio.getDiametro() <= 42){
             pontuacao += 8;
         }
         return pontuacao;
